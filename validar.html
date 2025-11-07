@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERTING - Validar Certificado</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">CERTING</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">INICIO</a></li>
+                    <li><a href="nosotros.html">NOSOTROS</a></li>
+                    <li><a href="cursos.html">CURSOS</a></li>
+                    <li><a href="validar.html" class="active">VALIDAR CERTIFICADO</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="validation-section">
+            <div class="container">
+                <h2>Validación de Certificado</h2>
+                <p>Ingrese el código único (ubicado en su certificado) para verificar su autenticidad.</p>
+                
+                <form id="validation-form">
+                    <input type="text" id="codigo-input" placeholder="Ej: CING-2024-001" required>
+                    <button type="submit" class="btn">Buscar</button>
+                </form>
+
+                <div id="loading-spinner">Cargando...</div>
+                <div id="error-message"></div>
+                
+                <div id="results-container">
+                    <div id="success-data">
+                        <div id="certificate-text">
+                            </div>
+                        <div id="certificate-image">
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CERTING. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
