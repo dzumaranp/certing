@@ -24,15 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 async function validateCertificate(code) {
     
-    // --- IMPORTANTE: CONFIGURACIÓN ---
-    // 1. Ve a tu Google Sheet.
-    // 2. Haz clic en "Archivo" > "Compartir" > "Publicar en la web".
-    // 3. Elige "Toda la hoja" (o la hoja específica) y "Valores separados por comas (.csv)".
-    // 4. Haz clic en "Publicar" y copia el enlace que te da.
-    // 5. Pega ese enlace aquí abajo.
-    const GOOGLE_SHEET_CSV_URL = 'URL_DE_TU_GOOGLE_SHEET_PUBLICADO_COMO_CSV';
-
-    // --- FIN DE CONFIGURACIÓN ---
+    // --- URL DE TU GOOGLE SHEET ---
+    // Este es el enlace que proporcionaste
+    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpN7dUtcPMlZcs4-fxsMZtc0iCyxS-vsAPdwE53EfuPPMVNWC_w_x8GuZd9lz7YfCOI_yHjlj7_fha/pub?output=csv';
+    // --- FIN DE LA URL ---
 
 
     // Seleccionar elementos del DOM para mostrar resultados
@@ -51,14 +46,6 @@ async function validateCertificate(code) {
     certText.innerHTML = "";
     certImage.innerHTML = "";
 
-    // Seguridad: Verifica que la URL no sea la de placeholder
-    if (GOOGLE_SHEET_CSV_URL === 'URL_DE_TU_GOOGLE_SHEET_PUBLICADO_COMO_CSV') {
-        loadingSpinner.style.display = "none";
-        errorMessage.style.display = "block";
-        errorMessage.innerText = "Error de configuración: La URL de Google Sheets no ha sido configurada en app.js.";
-        return;
-    }
-
     try {
         // 2. Realizar la petición (fetch) al CSV
         const response = await fetch(GOOGLE_SHEET_CSV_URL);
@@ -75,14 +62,13 @@ async function validateCertificate(code) {
 
         for (const row of rows) {
             // Divide cada fila en columnas. 
-            // Google Sheets CSV puede tener comas dentro de comillas, pero este parser simple no lo maneja.
-            // Asumimos datos simples sin comas internas.
+            // Este parser simple asume que no hay comas "," dentro de tus celdas.
             const columns = row.split(',');
             
             // Columna B es el índice 1 (A=0, B=1, C=2...)
             // Comparamos el código de la Col B (limpio) con el código ingresado
             if (columns.length > 1 && columns[1].trim().toUpperCase() === code) {
-                foundRow = columns.map(col => col.trim()); // Limpia espacios en todas las columnas
+                foundRow = columns.map(col => col.trim().replace(/"/g, '')); // Limpia espacios y comillas
                 break; // Detenemos la búsqueda al encontrarlo
             }
         }
@@ -98,7 +84,7 @@ async function validateCertificate(code) {
             const colG = foundRow[6]; // Promedio
 
             // IMPORTANTE: ID de la imagen de Google Drive
-            // Debes agregar el ID del archivo de Google Drive en la Columna H (índice 7)
+            // Asegúrate de que el ID del archivo de Drive esté en la Columna H (índice 7)
             const googleDriveFileId = foundRow[7]; 
 
             // Construir el texto
@@ -113,7 +99,6 @@ async function validateCertificate(code) {
             `;
             
             // Construir la URL de la imagen (baja resolución)
-            // Esta URL especial de Google Drive fuerza la visualización directa
             const imageURL = `https://drive.google.com/uc?export=view&id=${googleDriveFileId}`;
             const imageHTML = `<img src="${imageURL}" alt="Vista previa del Certificado">`;
 
