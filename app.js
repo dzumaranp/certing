@@ -124,3 +124,4 @@ async function validateCertificate(code) {
         loadingSpinner.style.display = "none";
     }
 }
+
